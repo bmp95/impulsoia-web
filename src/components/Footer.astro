@@ -1,0 +1,111 @@
+---
+import { privacy, legal, footer, nav, BRAND, hero } from "../data/content";
+import { verticales } from "../data/verticales";
+import { ta, wa } from "../lib/i18n";
+---
+
+<section id="privacidad" class="border-t border-white/8 px-[clamp(18px,5vw,48px)] py-[clamp(44px,6vh,68px)]">
+  <div class="mx-auto max-w-[880px]">
+    <details data-legal class="glass mb-3 px-6">
+      <summary class="flex items-center justify-between gap-5 py-5">
+        <span class="display text-[21px]" {...ta(legal.title)}>{legal.title.es}</span>
+        <span class="faq-icon flex-none text-[24px] leading-none text-accent">+</span>
+      </summary>
+      <div class="flex flex-col gap-4 pb-6 text-[14.5px] leading-[1.7] text-muted">
+        {
+          legal.blocks.map((b) => (
+            <p>
+              <strong class="font-semibold text-ink" {...ta(b.h)}>
+                {b.h.es}
+              </strong>{" "}
+              <span {...ta(b.p)}>{b.p.es}</span>
+            </p>
+          ))
+        }
+        <p class="text-[13px]" {...ta(legal.updated)}>{legal.updated.es}</p>
+      </div>
+    </details>
+
+    <details data-privacy class="glass px-6">
+      <summary class="flex items-center justify-between gap-5 py-5">
+        <span class="display text-[21px]" {...ta(privacy.title)}>{privacy.title.es}</span>
+        <span class="faq-icon flex-none text-[24px] leading-none text-accent">+</span>
+      </summary>
+      <div class="flex flex-col gap-4 pb-6 text-[14.5px] leading-[1.7] text-muted">
+        {
+          privacy.blocks.map((b) => (
+            <p>
+              <strong class="font-semibold text-ink" {...ta(b.h)}>
+                {b.h.es}
+              </strong>{" "}
+              <span {...ta(b.p)}>{b.p.es}</span>
+            </p>
+          ))
+        }
+        <p class="text-[13px]" {...ta(privacy.updated)}>{privacy.updated.es}</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<footer class="border-t border-white/8 px-[clamp(18px,5vw,48px)] py-12">
+  <div class="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-x-10 gap-y-7">
+    <div class="max-w-[330px]">
+      <div class="mb-3 flex items-center gap-3">
+        <img src="/img/logo.svg" alt="" width="30" height="24" class="h-6 w-auto" />
+        <span class="display text-[20px]">Impulso <span class="gradtext">IA</span></span>
+      </div>
+      <p class="text-[14px] leading-[1.6] text-muted" {...ta(footer.tagline)}>{footer.tagline.es}</p>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      <span class="font-mono text-[11px] tracking-[0.1em] text-muted/70 uppercase">Por sector</span>
+      <div class="flex flex-wrap gap-x-6 gap-y-2 text-[14px] text-muted">
+        {
+          verticales.map((v) => (
+            <a href={`/${v.slug}`} class="no-underline transition-colors hover:text-ink">
+              {v.nombre}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-x-7 gap-y-3 text-[14px] text-muted">
+      {
+        nav.slice(0, 4).map((item) => (
+          <a href={item.href} class="no-underline transition-colors hover:text-ink" {...ta(item.label)}>
+            {item.label.es}
+          </a>
+        ))
+      }
+      <a href={`mailto:${BRAND.email}`} class="text-accent no-underline hover:text-accent2">{BRAND.email}</a>
+      <a href={wa(hero.waMsg)} data-track="whatsapp-directo" class="text-accent no-underline hover:text-accent2">WhatsApp</a>
+    </div>
+  </div>
+
+  <div
+    class="mx-auto mt-7 flex max-w-[1180px] flex-wrap justify-between gap-3 border-t border-white/8 pt-6 text-[12.5px] text-muted"
+  >
+    <span class="inline-flex items-center gap-4">
+      © 2026 Impulso IA
+      <a
+        href="#privacidad"
+        data-legal-link
+        class="text-inherit underline underline-offset-[3px] hover:text-ink"
+        {...ta(legal.title)}
+      >
+        {legal.title.es}
+      </a>
+      <a
+        href="#privacidad"
+        data-priv-link
+        class="text-inherit underline underline-offset-[3px] hover:text-ink"
+        {...ta(privacy.title)}
+      >
+        {privacy.title.es}
+      </a>
+    </span>
+    <span {...ta(footer.closing)}>{footer.closing.es}</span>
+  </div>
+</footer>

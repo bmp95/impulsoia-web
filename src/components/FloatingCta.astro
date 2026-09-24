@@ -1,0 +1,25 @@
+---
+import { floatingCta as f } from "../data/content";
+import { ta } from "../lib/i18n";
+import Icon from "./Icon.astro";
+---
+
+<!--
+  Aparece al pasar el hero (donde ya hay CTA propio) y se esconde cuando el
+  formulario esta a la vista, para no tapar los campos. Lo gobierna app.ts.
+  En movil solo se ve el texto corto, para no comerse el ancho de pantalla.
+-->
+<a
+  data-fab
+  href="#contacto"
+  data-prefill={f.prefill}
+  data-track="cta-flotante"
+  class="fab btn btn-primary !px-5 !py-3.5 !text-[14.5px]"
+  aria-label={f.aria.es}
+  data-aria-es={f.aria.es}
+  data-aria-en={f.aria.en}
+>
+  <Icon name="scan" size={18} />
+  <span class="hidden sm:inline" {...ta(f.label)}>{f.label.es}</span>
+  <span class="sm:hidden" {...ta(f.short)}>{f.short.es}</span>
+</a>

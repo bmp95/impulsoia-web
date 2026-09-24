@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://impulsoia.io/sitemap.xml

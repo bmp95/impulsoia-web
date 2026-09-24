@@ -1,0 +1,95 @@
+---
+import { intelligence as ig } from "../data/content";
+import { ta } from "../lib/i18n";
+---
+
+<section id="inteligencia" class="relative">
+  <!-- Recorrido de scroll: 220vh (antes eran 400vh) -->
+  <div data-chip-track class="relative h-[220vh]">
+    <div class="sticky top-0 flex h-screen items-center overflow-hidden">
+      <!--
+        El vídeo se descarga sólo cuando la sección se acerca (src y poster los
+        asigna app.ts). Va recortado para quitar la marca de agua del generador,
+        sin pista de audio y con un keyframe por segundo, para que buscar por
+        scroll sea instantáneo.
+      -->
+      <video
+        data-chip-video
+        data-src="/video/chip.mp4"
+        data-poster="/video/chip-poster.jpg"
+        muted
+        playsinline
+        preload="none"
+        aria-hidden="true"
+        class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700"
+      ></video>
+
+      <!-- Oscurecido lateral: mantiene el texto legible sobre el vídeo -->
+      <div
+        class="pointer-events-none absolute inset-0 z-1"
+        style="background:linear-gradient(90deg, rgb(8 11 20/.96) 0%, rgb(8 11 20/.86) 34%, rgb(8 11 20/.45) 64%, rgb(8 11 20/.2) 100%)"
+      >
+      </div>
+      <div
+        class="pointer-events-none absolute inset-0 z-1"
+        style="background:radial-gradient(120% 85% at 50% 50%, transparent 40%, rgb(4 6 12/.75) 100%)"
+      >
+      </div>
+
+      <div class="relative z-2 mx-auto w-full max-w-[1180px] px-[clamp(18px,5vw,48px)]">
+        <div class="max-w-[540px]">
+          <span class="eyebrow" {...ta(ig.eyebrow)}>{ig.eyebrow.es}</span>
+
+          <h2 class="display mt-4 text-[clamp(34px,4.6vw,60px)]">
+            <span {...ta(ig.titleA)}>{ig.titleA.es}</span>{" "}
+            <span class="gradtext" {...ta(ig.titleB)}>{ig.titleB.es}</span>
+          </h2>
+
+          <p class="mt-7 max-w-[450px] text-[17px] leading-[1.65] text-muted" {...ta(ig.body)}>
+            {ig.body.es}
+          </p>
+
+          <div class="mt-10 max-w-[450px]">
+            <div class="mb-3 flex items-baseline justify-between">
+              <span
+                data-chip-status
+                class="font-mono text-[12.5px] tracking-[0.06em] text-accent2"
+                {...ta(ig.idle)}
+              >
+                {ig.idle.es}
+              </span>
+              <span data-chip-pct class="display text-[32px] text-ink">0%</span>
+            </div>
+
+            <div class="h-1.5 overflow-hidden rounded-full bg-white/10">
+              <div
+                data-chip-bar
+                class="h-full w-0 rounded-full"
+                style="background:linear-gradient(90deg,var(--color-accent),var(--color-accent2)); transition:width .12s linear"
+              >
+              </div>
+            </div>
+
+            <div class="mt-6 flex flex-wrap gap-2">
+              {
+                ig.steps.map((s) => (
+                  <span
+                    data-chip-step={s.at}
+                    class="rounded-full border border-white/12 px-3.5 py-1.5 text-[13px] text-muted transition-all duration-400"
+                    {...ta(s.label)}
+                  >
+                    {s.label.es}
+                  </span>
+                ))
+              }
+            </div>
+
+            <p class="mt-7 font-mono text-[11.5px] tracking-[0.1em] text-muted/70 uppercase" {...ta(ig.scrollHint)}>
+              {ig.scrollHint.es}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

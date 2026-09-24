@@ -1,0 +1,71 @@
+---
+import { flow } from "../data/content";
+import { ta } from "../lib/i18n";
+import Icon from "./Icon.astro";
+---
+
+<section id="resultados" class="relative px-[clamp(18px,5vw,48px)] py-[clamp(52px,7vh,92px)]">
+  <div class="mx-auto max-w-[1180px]">
+    <div class="mx-auto max-w-[700px] text-center">
+      <span class="eyebrow reveal" {...ta(flow.eyebrow)}>{flow.eyebrow.es}</span>
+      <h2 class="display reveal mt-4 text-[clamp(34px,4.6vw,60px)]" style="--d:80ms" {...ta(flow.title)}>
+        {flow.title.es}
+      </h2>
+    </div>
+
+    <div data-flow class="mt-14 flex flex-wrap items-stretch justify-center gap-3">
+      {
+        flow.nodes.map((n, i) => (
+          <>
+            <div
+              data-flow-node
+              class="glass spot reveal min-w-[210px] flex-1 p-6"
+              style={`--d:${i * 100}ms`}
+            >
+              <span
+                data-dot
+                class="mb-4 block h-2.5 w-2.5 rounded-full bg-white/25 transition-all duration-500"
+              />
+              <div class="mb-2 font-mono text-[11.5px] tracking-[0.1em] text-accent2">{n.n}</div>
+              <h3 class="display text-[21px]" {...ta(n.title)}>
+                {n.title.es}
+              </h3>
+              <p class="mt-1.5 text-[14px] leading-[1.55] text-muted" {...ta(n.body)}>
+                {n.body.es}
+              </p>
+            </div>
+            {i < flow.nodes.length - 1 && (
+              <div class="hidden self-center text-accent/60 xl:block">
+                <Icon name="arrow" size={20} />
+              </div>
+            )}
+          </>
+        ))
+      }
+    </div>
+
+    <div class="mt-14 grid gap-4 sm:grid-cols-3">
+      {
+        flow.stats.map((s, i) => (
+          <div class="glass spot reveal p-8 text-center" style={`--d:${i * 100}ms`}>
+            <div
+              class:list={[
+                "display gradtext text-[clamp(40px,4.4vw,56px)] leading-none",
+                s.italic ? "" : "not-italic",
+              ]}
+              {...ta(s.big)}
+            >
+              {s.big.es}
+            </div>
+            <h3 class="mt-4 text-[16px] font-semibold" {...ta(s.title)}>
+              {s.title.es}
+            </h3>
+            <p class="mt-1.5 text-[14px] leading-[1.55] text-muted" {...ta(s.body)}>
+              {s.body.es}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,64 @@
+---
+import { closeness as c } from "../data/content";
+import { ta } from "../lib/i18n";
+import Icon from "./Icon.astro";
+---
+
+<section id="cercania" class="relative px-[clamp(18px,5vw,48px)] py-[clamp(52px,7vh,92px)]">
+  <div class="mx-auto max-w-[1180px]">
+    <div class="max-w-[720px]">
+      <span class="eyebrow reveal" {...ta(c.eyebrow)}>{c.eyebrow.es}</span>
+      <h2 class="display reveal mt-4 text-[clamp(34px,4.6vw,58px)]" style="--d:80ms">
+        <span {...ta(c.titleA)}>{c.titleA.es}</span>{" "}
+        <span class="gradtext" {...ta(c.titleB)}>{c.titleB.es}</span>
+      </h2>
+      <p class="reveal mt-7 text-[17px] leading-[1.65] text-muted" style="--d:140ms" {...ta(c.body)}>
+        {c.body.es}
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-4 md:grid-cols-3">
+      {
+        c.pillars.map((p, i) => (
+          <article class="glass spot lift reveal p-7" style={`--d:${i * 90}ms`}>
+            <div
+              class="mb-5 flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 text-accent2"
+              style="background:linear-gradient(140deg, rgb(59 130 246/.18), rgb(6 214 245/.08))"
+            >
+              <Icon name={p.icon} size={21} />
+            </div>
+            <h3 class="display text-[24px]" {...ta(p.title)}>
+              {p.title.es}
+            </h3>
+            <p class="mt-2.5 text-[15px] leading-[1.6] text-muted" {...ta(p.body)}>
+              {p.body.es}
+            </p>
+          </article>
+        ))
+      }
+    </div>
+
+    <!-- Los compromisos son la prueba de la cercanía: reglas concretas, no adjetivos -->
+    <div
+      class="glass reveal mt-4 p-[clamp(28px,4vw,44px)]"
+      style="--d:200ms; background:linear-gradient(130deg, rgb(59 130 246/.12), rgb(6 214 245/.05) 55%, transparent)"
+    >
+      <h3 class="display text-[clamp(24px,2.4vw,30px)]" {...ta(c.promisesTitle)}>
+        {c.promisesTitle.es}
+      </h3>
+
+      <ul class="mt-7 grid list-none gap-x-10 gap-y-4 p-0 md:grid-cols-2">
+        {
+          c.promises.map((p) => (
+            <li class="flex gap-3.5 text-[15.5px] leading-[1.6] text-dim">
+              <span class="mt-1 flex-none text-accent3">
+                <Icon name="check" size={16} />
+              </span>
+              <span {...ta(p)}>{p.es}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

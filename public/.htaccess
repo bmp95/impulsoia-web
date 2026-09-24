@@ -1,0 +1,129 @@
+# impulsoia.io — configuracion de servidor para Hostinger (Apache / LiteSpeed)
+#
+# Todo va dentro de <IfModule>: si el modulo no existe, el bloque se ignora y el
+# sitio sigue funcionando. Este fichero no puede tumbar la web.
+#
+# Si algo fuera mal, se borra y se vuelve al comportamiento por defecto.
+
+# ---------- Canonicalizacion de dominio ----------
+# www.impulsoia.io y impulsoia.io servian AMBOS un 200 identico, sin redireccion.
+# El canonical del HTML lo mitigaba en Google, pero no consolida senales de enlace
+# ni cubre a otros motores. Se fuerza la version sin www, y HTTPS siempre.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # http -> https
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+  # www -> sin www
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+</IfModule>
+
+# ---------- URLs limpias ----------
+# Los archivos se llaman pagina.html (despliegue plano), pero se sirven en
+# /pagina, sin extension. Si alguien entra con .html, se redirige a la limpia
+# para no tener dos URLs con el mismo contenido.
+<IfModule mod_rewrite.c>
+  # Los ficheros de verificacion de Google Search Console y Bing son .html/.xml y
+  # DEBEN servirse tal cual: si se les aplica la redireccion a URL limpia, la
+  # verificacion falla sin decir por que.
+  #
+  # La exclusion va como condicion NEGADA de la propia regla de redireccion, no
+  # como una regla aparte terminada en [L]. La version con [L] se probo contra
+  # produccion y NO excluia el fichero de Google: LiteSpeed no corta el flujo
+  # igual que Apache. Asi no depende de la semantica de [L] en ningun servidor.
+  # Se excluye por partida doble, a proposito:
+  #
+  # La version con %{REQUEST_URI} se probo en produccion y NO excluia nada,
+  # mientras que la de %{THE_REQUEST} de abajo si funciona (es la que arma el
+  # redirect). LiteSpeed no parece exponer REQUEST_URI con la barra inicial, asi
+  # que ^/(...) nunca casaba. Se deja la exclusion sobre THE_REQUEST, que es la
+  # variable que aqui se sabe que funciona, y se conserva la otra con la barra
+  # opcional por si el sitio acaba en un Apache de verdad.
+  # La portada vive SOLO en "/". Sin esto, /index.html cae en la regla generica
+  # de abajo y acaba en /index, con la home accesible en dos direcciones.
+  # Va antes que la regla generica, y no hace bucle: tras el salto la peticion
+  # es "GET / ...", que ya no casa con este patron.
+  RewriteCond %{THE_REQUEST} \s/+index(\.html)?[\s?] [NC]
+  RewriteRule ^ / [R=301,L]
+
+  RewriteCond %{THE_REQUEST} !\s/+google[0-9a-f]+\.html[\s?] [NC]
+  RewriteCond %{REQUEST_URI} !^/?(google[0-9a-f]+\.html|BingSiteAuth\.xml)$ [NC]
+  RewriteCond %{THE_REQUEST} \s/+(.+)\.html[\s?] [NC]
+  RewriteRule ^ /%1 [R=301,L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME}\.html -f
+  RewriteRule ^(.*)$ $1.html [L]
+</IfModule>
+
+# ---------- Compresion ----------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+  AddOutputFilterByType DEFLATE application/json application/xml
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ---------- Caducidad de la cache ----------
+# Las fuentes, el video y los assets con hash en el nombre no cambian nunca:
+# se cachean un ano. El HTML no se cachea, para que un cambio de texto se vea
+# al recargar sin esperar.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault                          "access plus 1 month"
+  ExpiresByType text/html                 "access plus 0 seconds"
+  ExpiresByType text/css                  "access plus 1 year"
+  ExpiresByType application/javascript    "access plus 1 year"
+  ExpiresByType font/woff2                "access plus 1 year"
+  ExpiresByType video/mp4                 "access plus 1 year"
+  ExpiresByType image/png                 "access plus 6 months"
+  ExpiresByType image/jpeg                "access plus 6 months"
+  ExpiresByType image/svg+xml             "access plus 6 months"
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Sello de version de ESTE fichero.
+  #
+  # El .htaccess empieza por punto y los gestores de archivos lo ocultan, asi que
+  # es facil creer que se ha subido cuando en realidad sigue el anterior, y no
+  # avisa nadie. Con esta cabecera se comprueba desde fuera cual esta activo:
+  #
+  #   curl -sI https://impulsoia.io/ | grep -i x-config
+  #
+  # Al cambiar algo en este fichero, subir el numero.
+  Header always set X-Config-Version "5"
+
+  # El HTML siempre se revalida
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # Los assets con hash en el nombre son inmutables
+  <FilesMatch "\.(css|js|woff2|mp4)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Cabeceras de seguridad basicas
+  # HSTS: obliga a HTTPS durante un ano. Ojo: una vez que un navegador lo recibe,
+  # lo recuerda ese tiempo. No lo actives si algun dia necesitas servir por HTTP.
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always unset X-Powered-By
+</IfModule>
+
+# ---------- Tipos MIME ----------
+<IfModule mod_mime.c>
+  AddType font/woff2 .woff2
+  AddType image/svg+xml .svg
+  AddType video/mp4 .mp4
+</IfModule>
+
+# ---------- Pagina de error ----------
+# El sitio es una sola pagina: cualquier ruta inexistente va a la portada.
+ErrorDocument 404 /index.html

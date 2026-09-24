@@ -1,0 +1,147 @@
+---
+import { hero } from "../data/content";
+import { ta } from "../lib/i18n";
+import Icon from "./Icon.astro";
+
+const marquee = [...hero.marquee, ...hero.marquee];
+---
+
+<header class="relative px-[clamp(18px,5vw,48px)] pt-[clamp(104px,13vh,150px)] pb-[clamp(32px,4vh,56px)]">
+  <div class="gridlines"></div>
+
+  <div class="relative z-10 mx-auto grid max-w-[1180px] items-center gap-[clamp(40px,5vw,72px)] lg:grid-cols-[1.06fr_0.94fr]">
+    <div>
+      <span class="eyebrow reveal" {...ta(hero.eyebrow)}>{hero.eyebrow.es}</span>
+
+      <!-- Cada línea sube desde detrás de una máscara al cargar la página -->
+      <h1 class="display mt-6 text-[clamp(46px,6.6vw,86px)]">
+        <span class="line-mask"><span class="line-in" style="--d:120ms" {...ta(hero.titleA)}>{hero.titleA.es}</span></span>
+        <span class="line-mask"><span class="line-in gradtext" style="--d:260ms" {...ta(hero.titleB)}>{hero.titleB.es}</span></span>
+      </h1>
+
+      <p
+        class="reveal mt-11 max-w-[520px] text-[clamp(16px,1.35vw,19px)] leading-[1.65] text-muted"
+        style="--d:160ms"
+        {...ta(hero.body)}
+      >
+        {hero.body.es}
+      </p>
+
+      <div class="reveal mt-9 flex flex-wrap gap-3.5" style="--d:240ms">
+        <!-- Al formulario, no directo a WhatsApp: así queda registro del lead
+             aunque no llegue a enviar el mensaje, y llega ya contextualizado. -->
+        <a href="#contacto" data-prefill={hero.waMsg} data-track="cta-radiografia" data-track-detail="hero" class="btn btn-primary max-sm:w-full">
+          <Icon name="arrow" size={18} />
+          <span {...ta(hero.ctaPrimary)}>{hero.ctaPrimary.es}</span>
+        </a>
+        <a href="#servicios" class="btn btn-ghost max-sm:w-full">
+          <span {...ta(hero.ctaSecondary)}>{hero.ctaSecondary.es}</span>
+        </a>
+      </div>
+
+      <div class="reveal mt-10 flex flex-wrap gap-x-7 gap-y-3 text-[13.5px] text-muted" style="--d:320ms">
+        {
+          hero.trust.map((t) => (
+            <span class="inline-flex items-center gap-2">
+              <span class="text-accent3"><Icon name="check" size={14} /></span>
+              <span {...ta(t)}>{t.es}</span>
+            </span>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Panel de chat en cristal -->
+    <div class="reveal relative" style="--d:220ms">
+      <div
+        class="pointer-events-none absolute -inset-8 -z-10 rounded-[40px] opacity-70 blur-3xl"
+        style="background:radial-gradient(60% 55% at 55% 40%, rgb(59 130 246/.35), transparent 70%)"
+      >
+      </div>
+
+      <div data-tilt class="glass spot !rounded-[24px] p-5 shadow-[var(--shadow-deep)]">
+        <div class="flex items-center gap-3 border-b border-white/8 px-1.5 pb-4">
+          <span
+            class="flex h-10 w-10 flex-none items-center justify-center rounded-full text-[#050810]"
+            style="background:linear-gradient(135deg,var(--color-accent),var(--color-accent2))"
+          >
+            <Icon name="whatsapp" size={18} />
+          </span>
+          <div class="flex-1">
+            <div class="text-[14.5px] font-semibold" {...ta(hero.chat.assistant)}>
+              {hero.chat.assistant.es}
+            </div>
+            <div class="flex items-center gap-2 text-[12px] text-muted">
+              <span class="relative flex h-2 w-2">
+                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent3 opacity-70"></span>
+                <span class="relative inline-flex h-2 w-2 rounded-full bg-accent3"></span>
+              </span>
+              <span {...ta(hero.chat.status)}>{hero.chat.status.es}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex min-h-[236px] flex-col gap-3 px-1 pt-4 sm:pb-12">
+          {
+            hero.chat.messages.map((m, i) => (
+              <div
+                class:list={[
+                  "reveal max-w-[85%] rounded-2xl px-3.5 py-2.5 text-[14px] leading-[1.45]",
+                  m.from === "user"
+                    ? "self-end rounded-br-[6px] text-[#050810]"
+                    : "self-start rounded-bl-[6px] border border-white/8 bg-white/6 text-dim",
+                ]}
+                style={`--d:${420 + i * 340}ms${
+                  m.from === "user"
+                    ? ";background:linear-gradient(120deg,var(--color-accent),var(--color-accent2))"
+                    : ""
+                }`}
+                {...ta(m.text)}
+              >
+                {m.text.es}
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Tarjeta flotante que rompe la rejilla -->
+      <div
+        class="glass reveal absolute -bottom-7 -left-4 hidden w-fit !rounded-2xl px-5 py-3.5 sm:block"
+        style="--d:1650ms"
+      >
+        <div class="font-mono text-[10.5px] tracking-[0.1em] text-muted uppercase">
+          <span {...ta({ es: "Tiempo de respuesta", en: "Response time" })}>Tiempo de respuesta</span>
+        </div>
+        <div class="display mt-1 text-[26px] text-accent2">1,2 s</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marquee de sectores -->
+  <div class="reveal relative z-10 mx-auto mt-[clamp(44px,6vh,72px)] max-w-[1180px] border-t border-white/8 pt-8">
+    <div class="mb-5 text-center">
+      <span class="font-mono text-[12px] tracking-[0.1em] text-muted uppercase" {...ta(hero.marqueeLabel)}>
+        {hero.marqueeLabel.es}
+      </span>
+    </div>
+    <div class="marquee">
+      <div class="marquee-track">
+        {
+          [0, 1].map((dup) => (
+            <div class="flex flex-none items-center gap-9 pr-9" aria-hidden={dup === 1 ? "true" : undefined}>
+              {marquee.map((m) => (
+                <>
+                  <span class="display text-[22px] whitespace-nowrap text-dim/75" {...ta(m)}>
+                    {m.es}
+                  </span>
+                  <span class="text-accent/40">·</span>
+                </>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</header>

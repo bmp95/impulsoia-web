@@ -1,0 +1,178 @@
+---
+/**
+ * Carcasa de las paginas interiores.
+ *
+ * Esta unica ruta genera DOS familias de paginas:
+ *   - sector  ->  /ia-para-clinicas-dentales          (el eje del hub)
+ *   - ciudad  ->  /ia-para-clinicas-dentales-en-jaen  (los radios)
+ *
+ * Van juntas por obligacion de Astro, que no admite dos rutas dinamicas
+ * hermanas en la misma carpeta. Lo que cambia entre una y otra (titulo,
+ * canonical, schema y cuerpo) se decide aqui; el resto de la pagina es identico.
+ */
+import "../styles/global.css";
+import { BRAND } from "../data/content";
+import { analytics } from "../data/analytics";
+import { verticales } from "../data/verticales";
+import { combos } from "../data/ciudades";
+
+import Nav from "../components/Nav.astro";
+import Contact from "../components/Contact.astro";
+import Footer from "../components/Footer.astro";
+import FloatingCta from "../components/FloatingCta.astro";
+import PaginaSector from "../components/PaginaSector.astro";
+import PaginaCiudad from "../components/PaginaCiudad.astro";
+
+export function getStaticPaths() {
+  return [
+    ...verticales.map((v) => ({ params: { vertical: v.slug }, props: { tipo: "sector" as const, v } })),
+    ...combos.map((c) => ({ params: { vertical: c.slug }, props: { tipo: "ciudad" as const, c } })),
+  ];
+}
+
+const props = Astro.props;
+const esCiudad = props.tipo === "ciudad";
+
+const slug = esCiudad ? props.c.slug : props.v.slug;
+const metaTitulo = esCiudad ? props.c.metaTitulo : props.v.metaTitulo;
+const metaDescripcion = esCiudad ? props.c.metaDescripcion : props.v.metaDescripcion;
+const url = `${BRAND.site}${slug}`;
+
+// --- Schema ---------------------------------------------------------------
+// El Service de una pagina de ciudad declara esa ciudad como areaServed. Es la
+// senal que le dice a Google para que zona compite, y la razon de fondo por la
+// que estas paginas existen por separado en vez de ser una sola con una lista.
+const servicio = esCiudad
+  ? {
+      "@type": "Service",
+      "@id": `${url}#servicio`,
+      name: props.c.titulo,
+      description: props.c.metaDescripcion,
+      serviceType: "Implantación de inteligencia artificial",
+      provider: { "@id": `${BRAND.site}#negocio` },
+      areaServed: {
+        "@type": "City",
+        name: props.c.ciudad.nombre,
+        containedInPlace: { "@type": "AdministrativeArea", name: props.c.ciudad.provincia },
+      },
+      offers: { "@type": "Offer", price: 1200, priceCurrency: "EUR", availability: "https://schema.org/InStock" },
+    }
+  : {
+      "@type": "Service",
+      "@id": `${url}#servicio`,
+      name: props.v.titulo,
+      description: props.v.metaDescripcion,
+      serviceType: "Implantación de inteligencia artificial",
+      provider: { "@id": `${BRAND.site}#negocio` },
+      areaServed: [
+        { "@type": "City", name: "Jaén" },
+        { "@type": "Country", name: "España" },
+      ],
+      offers: { "@type": "Offer", price: 1200, priceCurrency: "EUR", availability: "https://schema.org/InStock" },
+    };
+
+const preguntas = esCiudad ? [props.c.angulo.faq, ...props.c.ciudad.faq] : props.v.faq;
+
+// Las migas de una pagina de ciudad tienen tres niveles y reflejan la jerarquia
+// real del hub: Inicio > Sector > Ciudad.
+const migas = esCiudad
+  ? [
+      { name: "Inicio", item: BRAND.site },
+      { name: props.c.vertical.nombre, item: `${BRAND.site}${props.c.vertical.slug}` },
+      { name: props.c.ciudad.nombre, item: url },
+    ]
+  : [
+      { name: "Inicio", item: BRAND.site },
+      { name: props.v.nombre, item: url },
+    ];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    servicio,
+    {
+      "@type": "FAQPage",
+      "@id": `${url}#faq`,
+      mainEntity: preguntas.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: migas.map((m, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: m.name,
+        item: m.item,
+      })),
+    },
+  ],
+};
+
+const fonts = ["/fonts/schibsted-latin.woff2", "/fonts/instrument.woff2", "/fonts/plexmono.woff2"];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{metaTitulo}</title>
+    <meta name="description" content={metaDescripcion} />
+    <meta name="author" content={BRAND.name} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href={url} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <meta name="theme-color" content="#080b14" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content={BRAND.name} />
+    <meta property="og:title" content={metaTitulo} />
+    <meta property="og:description" content={metaDescripcion} />
+    <meta property="og:url" content={url} />
+    <meta property="og:image" content={`${BRAND.site}og-image.png`} />
+    <meta property="og:locale" content="es_ES" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {fonts.map((href) => <link rel="preload" as="font" type="font/woff2" href={href} crossorigin />)}
+
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+    {
+      analytics.provider === "umami" && analytics.siteId && (
+        <script defer src={`${analytics.umamiHost}/script.js`} data-website-id={analytics.siteId} />
+      )
+    }
+  </head>
+
+  <body id="top">
+    <a href="#contenido" class="skip-link">Saltar al contenido</a>
+
+    <div class="aurora" aria-hidden="true"><div class="aurora-glow"></div></div>
+    <div class="grain" aria-hidden="true"></div>
+    <div data-progress class="progress" aria-hidden="true"></div>
+
+    <Nav />
+
+    <main id="contenido" class="relative z-10">
+      {esCiudad ? <PaginaCiudad c={props.c} /> : <PaginaSector v={props.v} />}
+
+      <Contact />
+    </main>
+
+    <div class="relative z-10">
+      <Footer />
+    </div>
+
+    <FloatingCta />
+
+    <script>
+      import "../scripts/app.ts";
+    </script>
+  </body>
+</html>

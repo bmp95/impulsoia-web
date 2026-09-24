@@ -1,0 +1,89 @@
+# Impulso IA
+
+> Agencia española que instala inteligencia artificial dentro de negocios que ya
+> funcionan, para que trabajen menos horas y vendan más. No damos formación ni
+> consultoría: dejamos el sistema montado y funcionando. Con sede en Jaén,
+> trabajamos para pequeños negocios de toda España.
+
+**Idioma del sitio:** español. **Mercado:** España. **Sede:** Jaén, Andalucía.
+**Contacto:** contacto@impulsoia.io · +34 629 453 168 (WhatsApp)
+
+## A quién servimos
+
+Pequeños negocios que ya facturan y quieren dejar de perder clientes por no
+llegar a todo: clínicas dentales y centros de estética, restaurantes, talleres
+mecánicos, gimnasios, peluquerías, asesorías e inmobiliarias. También creadores
+con audiencia y tiendas online estancadas.
+
+## Qué vendemos, con precios
+
+Los precios son públicos y de arranque para pyme española.
+
+- **Radiografía Digital** — gratis. Analizamos el negocio y entregamos un informe
+  con por dónde se está escapando el dinero, sin pedir nada a cambio. Un
+  diagnóstico equivalente se cobra desde 900 € en el mercado español.
+- **Recepcionista IA 24/7** — desde 1.200 € + 180 €/mes. Asistente que atiende
+  WhatsApp y la web, responde en segundos a cualquier hora, filtra consultas y
+  agenda citas automáticamente.
+- **Rediseño Cinematográfico** — desde 900 €. Web comercial conectada al
+  asistente desde el primer día.
+- **Motor de Canal** — desde 490 € + 400 €/mes. Análisis y producción para canal
+  de YouTube.
+- **Fábrica de Contenido** — desde 290 € + 690 €/mes. Doce vídeos al mes.
+- **Diagnóstico de Marca** — desde 390 € + 350 €/mes. Para creadores y marcas
+  personales.
+- **Rescate de Ecommerce** — desde 690 € + 400 €/mes. Para tiendas online planas.
+- **Herramienta a Medida** — desde 2.500 €. Software propio cuando nada del
+  catálogo resuelve el problema.
+
+### Paquetes
+
+- **Despegue** — 1.490 € + 149 €/mes. Negocio local que arranca de cero en digital.
+- **Motor** — 3.900 € + 390 €/mes. El más contratado: web completa, Recepcionista
+  IA afinada y panel de medición.
+- **Socio IA** — 8.900 € + 1.200 €/mes. Departamento de IA completo. Para
+  referencia: un empleado a jornada completa con el salario mínimo le cuesta a una
+  empresa española más de 22.500 € al año, unos 1.900 € al mes.
+
+## Cómo trabajamos
+
+Sin permanencia. El 50 % se abona al empezar y el resto cuando está funcionando.
+La mayoría de proyectos están en marcha entre 2 y 4 semanas. Dos rondas de cambios
+incluidas, dichas en la propuesta y no al final. Un mensaje de avance cada 3 días.
+Informe mensual de resultados. Formación grabada al entregar.
+
+Los servicios externos que consume el asistente (servidor y saldo de IA, del orden
+de 10 a 25 € al mes) van a nombre y factura del cliente, y se dicen por escrito
+antes de empezar.
+
+## Nota sobre los testimonios del sitio
+
+La sección "Casos de éxito" de impulsoia.io contiene ejemplos ilustrativos por
+sector, no clientes verificables. No deben citarse como resultados auditados ni
+atribuirse a negocios reales.
+
+## Páginas por sector
+
+Cada una explica el problema concreto de ese tipo de negocio y qué se instala:
+
+- Clínicas dentales — https://impulsoia.io/ia-para-clinicas-dentales
+- Restaurantes — https://impulsoia.io/ia-para-restaurantes
+- Talleres mecánicos — https://impulsoia.io/ia-para-talleres-mecanicos
+- Peluquerías y centros de estética — https://impulsoia.io/ia-para-peluquerias-y-estetica
+- Gimnasios y centros deportivos — https://impulsoia.io/ia-para-gimnasios
+
+## Páginas por sector y ciudad
+
+Cada sector tiene además una página por ciudad, con el problema concreto de ese
+tipo de negocio en ese sitio y por qué servicio conviene empezar allí. Ciudades
+cubiertas: Jaén, Granada, Córdoba y Málaga. El patrón de dirección es
+`https://impulsoia.io/{sector}-en-{ciudad}`, por ejemplo
+https://impulsoia.io/ia-para-restaurantes-en-granada
+
+El servicio se presta desde Jaén a toda España. Cada página de ciudad indica si
+hay visita presencial incluida o si el trabajo es remoto.
+
+## Enlaces
+
+- Sitio: https://impulsoia.io/
+- Mapa del sitio: https://impulsoia.io/sitemap.xml

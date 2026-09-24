@@ -1,0 +1,90 @@
+---
+import { contact, BRAND } from "../data/content";
+import { ta, wa } from "../lib/i18n";
+import Icon from "./Icon.astro";
+
+const f = contact.form;
+---
+
+<section id="contacto" class="relative px-[clamp(18px,5vw,48px)] py-[clamp(60px,8vh,104px)]">
+  <div class="mx-auto grid max-w-[1100px] items-center gap-[clamp(40px,5vw,72px)] lg:grid-cols-2">
+    <div class="reveal">
+      <h2 class="display text-[clamp(34px,4.6vw,60px)]" {...ta(contact.title)}>
+        {contact.title.es}
+      </h2>
+      <p class="mt-8 max-w-[450px] text-[17px] leading-[1.65] text-muted" {...ta(contact.body)}>
+        {contact.body.es}
+      </p>
+
+      <div class="mt-8 flex flex-col gap-3">
+        <a href={wa(contact.waMsg)} class="group inline-flex items-center gap-3.5 text-[15px] text-ink no-underline">
+          <span class="glass flex h-11 w-11 flex-none items-center justify-center !rounded-full text-accent2 transition-colors group-hover:text-ink">
+            <Icon name="whatsapp" size={18} />
+          </span>
+          <span>{BRAND.phonePretty} · WhatsApp</span>
+        </a>
+        <a href={`mailto:${BRAND.email}`} class="group inline-flex items-center gap-3.5 text-[15px] text-ink no-underline">
+          <span class="glass flex h-11 w-11 flex-none items-center justify-center !rounded-full text-accent transition-colors group-hover:text-ink">
+            <Icon name="mail" size={18} />
+          </span>
+          <span>{BRAND.email}</span>
+        </a>
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-[13.5px] text-muted">
+        {
+          contact.perks.map((p) => (
+            <span class="inline-flex items-center gap-2">
+              <span class="text-accent3"><Icon name="check" size={14} /></span>
+              <span {...ta(p)}>{p.es}</span>
+            </span>
+          ))
+        }
+      </div>
+    </div>
+
+    <form
+      data-contact-form
+      data-phone={BRAND.phone}
+      data-key={BRAND.formKey}
+      novalidate
+      class="glass reveal flex flex-col gap-4 p-[clamp(24px,3vw,36px)] shadow-[var(--shadow-deep)]"
+      style="--d:120ms"
+    >
+      <label class="flex flex-col gap-2">
+        <span class="field-label" {...ta(f.name)}>{f.name.es}</span>
+        <input data-f-name type="text" required class="field" placeholder={f.namePlaceholder.es} />
+      </label>
+
+      <label class="flex flex-col gap-2">
+        <span class="field-label" {...ta(f.business)}>{f.business.es}</span>
+        <input data-f-business type="text" class="field" placeholder={f.businessPlaceholder.es} />
+      </label>
+
+      <label class="flex flex-col gap-2">
+        <span class="field-label" {...ta(f.phone)}>{f.phone.es}</span>
+        <input data-f-phone type="tel" inputmode="tel" class="field" placeholder="+34 600 000 000" />
+      </label>
+
+      <label class="flex flex-col gap-2">
+        <span class="field-label" {...ta(f.need)}>{f.need.es}</span>
+        <textarea data-f-msg rows="3" class="field resize-y" placeholder={f.needPlaceholder.es}></textarea>
+      </label>
+
+      <div class="mt-1 flex flex-wrap gap-2.5">
+        <button type="submit" class="btn btn-primary flex-1 basis-[150px] !px-4 whitespace-nowrap">
+          <Icon name="whatsapp" size={18} />
+          <span {...ta(f.submitWa)}>{f.submitWa.es}</span>
+        </button>
+        <button type="button" data-email-btn class="btn btn-ghost flex-1 basis-[130px] !px-4 whitespace-nowrap">
+          <Icon name="mail" size={18} />
+          <span {...ta(f.submitMail)}>{f.submitMail.es}</span>
+        </button>
+      </div>
+
+      <p data-f-hint class="min-h-[18px] text-center text-[12.5px] text-muted" {...ta(f.hint)}>
+        {f.hint.es}
+      </p>
+    </form>
+  </div>
+</section>

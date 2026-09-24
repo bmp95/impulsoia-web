@@ -1,0 +1,115 @@
+---
+import { services } from "../data/content";
+import { verticales } from "../data/verticales";
+import { ta } from "../lib/i18n";
+import Icon from "./Icon.astro";
+---
+
+<section id="servicios" class="relative px-[clamp(18px,5vw,48px)] py-[clamp(52px,7vh,92px)]">
+  <div class="mx-auto max-w-[1180px]">
+    <div class="max-w-[680px]">
+      <span class="eyebrow reveal" {...ta(services.eyebrow)}>{services.eyebrow.es}</span>
+      <h2 class="display reveal mt-4 text-[clamp(34px,4.4vw,58px)]" style="--d:80ms" {...ta(services.title)}>
+        {services.title.es}
+      </h2>
+      <p class="reveal mt-7 text-[17px] leading-[1.65] text-muted" style="--d:140ms" {...ta(services.body)}>
+        {services.body.es}
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        services.items.map((item, i) => {
+          // La Radiografía Digital es la puerta de entrada: va destacada.
+          const isEntry = i === 0;
+          // La última ocupa dos columnas en móvil-tablet para no dejar hueco;
+          // en escritorio vuelve a una y comparte fila con la llamada a la acción.
+          const isLast = i === services.items.length - 1;
+          return (
+            <article
+              class:list={[
+                "glass spot lift reveal flex flex-col p-7",
+                isEntry && "sm:col-span-2",
+                isLast && "sm:col-span-2 lg:col-span-1",
+              ]}
+              style={`--d:${(i % 4) * 70}ms${
+                isEntry
+                  ? ";background:linear-gradient(150deg, rgb(59 130 246/.16), rgb(6 214 245/.06) 60%, transparent);border-color:rgb(6 214 245/.4)"
+                  : ""
+              }`}
+            >
+              <div class="mb-5 flex items-start justify-between gap-3">
+                <div
+                  class="flex h-11 w-11 flex-none items-center justify-center rounded-xl border border-white/10 text-accent2"
+                  style="background:linear-gradient(140deg, rgb(59 130 246/.18), rgb(6 214 245/.08))"
+                >
+                  <Icon name={item.icon} size={21} />
+                </div>
+                {isEntry && (
+                  <span
+                    class="rounded-full px-3 py-1 font-mono text-[10.5px] tracking-[0.09em] text-[#04121c] uppercase"
+                    style="background:var(--brand-grad)"
+                    {...ta({ es: "Empieza aquí", en: "Start here" })}
+                  >
+                    Empieza aquí
+                  </span>
+                )}
+              </div>
+
+              <h3 class="display text-[24px]" {...ta(item.title)}>
+                {item.title.es}
+              </h3>
+
+              <p class="mt-2.5 flex-1 text-[15px] leading-[1.6] text-muted" {...ta(item.body)}>
+                {item.body.es}
+              </p>
+
+              <p
+                class="mt-5 border-t border-white/8 pt-4 font-mono text-[12px] tracking-[0.05em] text-dim/80"
+                {...ta(item.price)}
+              >
+                {item.price.es}
+              </p>
+            </article>
+          );
+        })
+      }
+
+      <article
+        class="glass spot reveal flex flex-wrap items-center justify-between gap-6 p-8 sm:col-span-2 lg:col-span-3"
+        style="--d:280ms; background:linear-gradient(110deg, rgb(59 130 246/.13), rgb(6 214 245/.06) 55%, transparent)"
+      >
+        <div class="max-w-[620px]">
+          <h3 class="display text-[25px]" {...ta(services.ctaTitle)}>{services.ctaTitle.es}</h3>
+          <p class="mt-2 text-[15px] leading-[1.6] text-dim/80" {...ta(services.ctaBody)}>
+            {services.ctaBody.es}
+          </p>
+        </div>
+        <a href="#contacto" data-prefill={services.ctaWaMsg} data-track="cta-radiografia" data-track-detail="servicios" class="btn btn-primary flex-none">
+          <span {...ta(services.ctaLink)}>{services.ctaLink.es}</span>
+          <Icon name="arrow" size={17} />
+        </a>
+      </article>
+    </div>
+
+    <!-- Enlace interno a las paginas por sector: es lo que las hace encontrables -->
+    <div class="reveal mt-10 flex flex-wrap items-center gap-3">
+      <span class="font-mono text-[12px] tracking-[0.1em] text-muted uppercase">
+        ¿A qué te dedicas?
+      </span>
+      {
+        verticales.map((v) => (
+          <a
+            href={`/${v.slug}`}
+            data-track="ver-sector"
+            data-track-detail={v.nombre}
+            class="glass lift inline-flex items-center gap-2 !rounded-full px-4 py-2.5 text-[14.5px] text-dim no-underline hover:text-ink"
+          >
+            {v.nombre}
+            <Icon name="arrow" size={14} />
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>

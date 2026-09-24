@@ -1,0 +1,215 @@
+---
+import "../styles/global.css";
+import { meta, faq, BRAND, services, plans } from "../data/content";
+import { analytics } from "../data/analytics";
+
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
+import Services from "../components/Services.astro";
+import Intelligence from "../components/Intelligence.astro";
+import Process from "../components/Process.astro";
+import Closeness from "../components/Closeness.astro";
+import Flow from "../components/Flow.astro";
+import Cases from "../components/Cases.astro";
+import Plans from "../components/Plans.astro";
+import Faq from "../components/Faq.astro";
+import Contact from "../components/Contact.astro";
+import Footer from "../components/Footer.astro";
+import FloatingCta from "../components/FloatingCta.astro";
+
+// El schema se genera del MISMO content.ts que pinta la página, así nunca se
+// desincroniza: si cambias un precio arriba, el dato estructurado cambia solo.
+//
+// Deliberadamente NO se emite Review ni AggregateRating: los testimonios de la
+// web son ilustrativos, no clientes verificables, y marcarlos como reseñas
+// reales sería marcado engañoso — motivo de acción manual por parte de Google.
+
+const eur = (n: number) => ({
+  "@type": "Offer",
+  price: n,
+  priceCurrency: "EUR",
+  availability: "https://schema.org/InStock",
+});
+
+const catalogo = {
+  "@type": "OfferCatalog",
+  name: "Servicios de Impulso IA",
+  itemListElement: [
+    ...services.items.map((s) => ({
+      "@type": "Offer",
+      ...eur(s.priceFrom),
+      itemOffered: {
+        "@type": "Service",
+        name: s.title.es,
+        description: s.body.es,
+        provider: { "@id": `${BRAND.site}#negocio` },
+        areaServed: { "@type": "Country", name: "España" },
+      },
+    })),
+    ...plans.items.map((p) => ({
+      "@type": "Offer",
+      ...eur(p.setupNum),
+      name: `Paquete ${p.name.es}`,
+      description: `${p.tagline.es} Cuota mensual: ${p.monthlyNum} €.`,
+      itemOffered: {
+        "@type": "Service",
+        name: `Paquete ${p.name.es}`,
+        description: p.features.map((f) => f.es).join(". "),
+        provider: { "@id": `${BRAND.site}#negocio` },
+      },
+    })),
+  ],
+};
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfessionalService",
+      "@id": `${BRAND.site}#negocio`,
+      name: BRAND.name,
+      url: BRAND.site,
+      logo: `${BRAND.site}og-image.png`,
+      image: `${BRAND.site}og-image.png`,
+      description:
+        "Implantación de inteligencia artificial en pequeños negocios que ya funcionan: asistente de WhatsApp 24/7, webs comerciales, automatizaciones y captación de clientes.",
+      email: BRAND.email,
+      telephone: `+${BRAND.phone}`,
+      priceRange: "€€",
+      currenciesAccepted: "EUR",
+      knowsLanguage: ["es", "en"],
+      // Negocio sin local de cara al público: se declara la localidad para que
+      // los motores puedan situarlo, sin inventar una dirección postal.
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Jaén",
+        addressRegion: "Andalucía",
+        addressCountry: "ES",
+      },
+      areaServed: [
+        { "@type": "City", name: "Jaén" },
+        { "@type": "AdministrativeArea", name: "Andalucía" },
+        { "@type": "Country", name: "España" },
+      ],
+      hasOfferCatalog: catalogo,
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "customer service",
+        email: BRAND.email,
+        telephone: `+${BRAND.phone}`,
+        availableLanguage: ["es", "en"],
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${BRAND.site}#web`,
+      url: BRAND.site,
+      name: BRAND.name,
+      inLanguage: "es",
+      publisher: { "@id": `${BRAND.site}#negocio` },
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${BRAND.site}#faq`,
+      mainEntity: faq.items.map((i) => ({
+        "@type": "Question",
+        name: i.q.es,
+        acceptedAnswer: { "@type": "Answer", text: i.a.es },
+      })),
+    },
+  ],
+};
+
+const fonts = [
+  "/fonts/schibsted-latin.woff2",
+  "/fonts/instrument.woff2",
+  "/fonts/plexmono.woff2",
+];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
+    <meta name="keywords" content={meta.keywords} />
+    <meta name="author" content={BRAND.name} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href={BRAND.site} />
+
+    <!-- Solo SVG (0,4 KB). El PNG se queda para el icono de inicio de iOS,
+         que no lo descarga nadie mas. Con `alternate icon` Chrome bajaba los dos. -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <meta name="theme-color" content="#080b14" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={BRAND.name} />
+    <meta property="og:title" content={meta.ogTitle} />
+    <meta property="og:description" content={meta.ogDescription} />
+    <meta property="og:url" content={BRAND.site} />
+    <meta property="og:image" content={`${BRAND.site}og-image.png`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="es_ES" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={meta.ogTitle} />
+    <meta name="twitter:description" content={meta.ogDescription} />
+    <meta name="twitter:image" content={`${BRAND.site}og-image.png`} />
+
+    {fonts.map((href) => <link rel="preload" as="font" type="font/woff2" href={href} crossorigin />)}
+
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+    {/* Analitica sin cookies. No se emite nada mientras provider sea "none". */}
+    {analytics.provider === "umami" && analytics.siteId && (
+      <script defer src={`${analytics.umamiHost}/script.js`} data-website-id={analytics.siteId}></script>
+    )}
+    {analytics.provider === "plausible" && analytics.siteId && (
+      <script defer data-domain={analytics.siteId} src="https://plausible.io/js/script.tagged-events.js"></script>
+    )}
+    {analytics.provider === "cloudflare" && analytics.siteId && (
+      <script
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={`{"token": "${analytics.siteId}"}`}
+      ></script>
+    )}
+  </head>
+
+  <body id="top">
+    <a href="#contenido" class="skip-link">Saltar al contenido</a>
+
+    <div class="aurora" aria-hidden="true"><div class="aurora-glow"></div></div>
+    <div class="grain" aria-hidden="true"></div>
+    <div data-progress class="progress" aria-hidden="true"></div>
+
+    <Nav />
+
+    <main id="contenido" class="relative z-10">
+      <Hero />
+      <Services />
+      <Intelligence />
+      <Process />
+      <Closeness />
+      <Flow />
+      <Cases />
+      <Plans />
+      <Faq />
+      <Contact />
+    </main>
+
+    <div class="relative z-10">
+      <Footer />
+    </div>
+
+    <FloatingCta />
+
+    <script>
+      import "../scripts/app.ts";
+    </script>
+  </body>
+</html>

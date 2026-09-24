@@ -1,0 +1,211 @@
+---
+/**
+ * Cuerpo de una pagina de SECTOR (el eje del hub).
+ *
+ * Estaba dentro de [vertical].astro. Se saco a un componente cuando esa ruta
+ * paso a generar tambien las paginas de ciudad: Astro no admite dos rutas
+ * dinamicas hermanas, asi que la ruta es una carcasa que elige cuerpo.
+ */
+import { hero } from "../data/content";
+import { verticales, type Vertical } from "../data/verticales";
+import { ciudadesDe } from "../data/ciudades";
+import { wa } from "../lib/i18n";
+import Icon from "./Icon.astro";
+
+const { v } = Astro.props as { v: Vertical };
+const ciudades = ciudadesDe(v.slug);
+---
+
+      <header class="relative px-[clamp(18px,5vw,48px)] pt-[clamp(104px,13vh,150px)] pb-[clamp(32px,4vh,56px)]">
+        <div class="gridlines"></div>
+        <div class="relative z-10 mx-auto max-w-[820px]">
+          <nav class="mb-6 font-mono text-[12px] tracking-[0.08em] text-muted uppercase">
+            <a href="/" class="no-underline text-inherit hover:text-ink">Inicio</a>
+            <span class="mx-2 opacity-40">/</span>
+            <span class="text-accent2">{v.nombre}</span>
+          </nav>
+
+          <h1 class="display text-[clamp(40px,5.6vw,68px)]">{v.titulo}</h1>
+
+          <p class="mt-8 text-[clamp(17px,1.5vw,20px)] leading-[1.6] text-dim">{v.entradilla}</p>
+
+          <div class="mt-9 flex flex-wrap gap-3.5">
+            <a
+              href="#contacto"
+              data-prefill={`Hola, tengo un negocio del sector ${v.nombre.toLowerCase()} y quiero mi Radiografía Digital`}
+              data-track="cta-radiografia"
+              data-track-detail={v.slug}
+              class="btn btn-primary max-sm:w-full"
+            >
+              <Icon name="arrow" size={18} />
+              <span>Quiero mi Radiografía Digital</span>
+            </a>
+            <a href={wa(hero.waMsg)} data-track="whatsapp-directo" class="btn btn-ghost max-sm:w-full">
+              <Icon name="whatsapp" size={18} />
+              <span>Preguntar por WhatsApp</span>
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <!-- Las fugas del sector -->
+      <section class="relative px-[clamp(18px,5vw,48px)] py-[clamp(52px,7vh,92px)]">
+        <div class="mx-auto max-w-[1180px]">
+          <span class="eyebrow reveal">01 — Por dónde se escapa</span>
+          <h2 class="display reveal mt-4 max-w-[760px] text-[clamp(32px,4.2vw,52px)]" style="--d:80ms">
+            Cuatro fugas que no aparecen en ninguna cuenta.
+          </h2>
+
+          <div class="mt-12 grid gap-4 md:grid-cols-2">
+            {
+              v.fugas.map((f, i) => (
+                <article class="glass spot lift reveal p-7" style={`--d:${(i % 2) * 80}ms`}>
+                  <h3 class="display text-[23px]">{f.titulo}</h3>
+                  <p class="mt-3 text-[15.5px] leading-[1.65] text-muted">{f.texto}</p>
+                </article>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- Qué se instala -->
+      <section class="relative px-[clamp(18px,5vw,48px)] py-[clamp(52px,7vh,92px)]">
+        <div class="mx-auto max-w-[1180px]">
+          <span class="eyebrow reveal">02 — Qué instalamos</span>
+          <h2 class="display reveal mt-4 max-w-[760px] text-[clamp(32px,4.2vw,52px)]" style="--d:80ms">
+            No es un paquete cerrado: es lo que tu negocio necesita.
+          </h2>
+
+          <div class="mt-12 grid gap-4 lg:grid-cols-3">
+            {
+              v.solucion.map((s, i) => (
+                <article class="glass spot lift reveal flex flex-col p-7" style={`--d:${i * 80}ms`}>
+                  <h3 class="display text-[24px]">{s.servicio}</h3>
+                  <p class="mt-3 flex-1 text-[15px] leading-[1.65] text-muted">{s.texto}</p>
+                  <p class="mt-5 border-t border-white/8 pt-4 font-mono text-[12px] tracking-[0.05em] text-dim/80">
+                    {s.precio}
+                  </p>
+                </article>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- El flujo concreto -->
+      <section class="relative px-[clamp(18px,5vw,48px)] py-[clamp(52px,7vh,92px)]">
+        <div class="mx-auto max-w-[1180px]">
+          <span class="eyebrow reveal">03 — Cómo se ve en tu día</span>
+          <h2 class="display reveal mt-4 max-w-[760px] text-[clamp(32px,4.2vw,52px)]" style="--d:80ms">
+            Un caso, paso a paso.
+          </h2>
+
+          <div data-flow class="mt-12 flex flex-wrap items-stretch justify-center gap-3">
+            {
+              v.flujo.map((p, i) => (
+                <>
+                  <div data-flow-node class="glass spot reveal min-w-[210px] flex-1 p-6" style={`--d:${i * 90}ms`}>
+                    <span data-dot class="mb-4 block h-2.5 w-2.5 rounded-full bg-white/25 transition-all duration-500" />
+                    <div class="mb-2 font-mono text-[11.5px] tracking-[0.1em] text-accent2">
+                      {String(i + 1).padStart(2, "0")}
+                    </div>
+                    <h3 class="display text-[20px]">{p.paso}</h3>
+                    <p class="mt-1.5 text-[14px] leading-[1.55] text-muted">{p.texto}</p>
+                  </div>
+                  {i < v.flujo.length - 1 && (
+                    <div class="hidden self-center text-accent/60 xl:block">
+                      <Icon name="arrow" size={20} />
+                    </div>
+                  )}
+                </>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ del sector -->
+      <section class="relative px-[clamp(18px,5vw,48px)] py-[clamp(52px,7vh,92px)]">
+        <div class="mx-auto max-w-[840px]">
+          <div class="mb-11 text-center">
+            <span class="eyebrow reveal">04 — Lo que suelen preguntarnos</span>
+            <h2 class="display reveal mt-4 text-[clamp(30px,4vw,48px)]" style="--d:80ms">
+              Dudas de tu sector.
+            </h2>
+          </div>
+
+          <div class="reveal flex flex-col gap-3">
+            {
+              v.faq.map((f, i) => (
+                <details class="glass spot overflow-hidden px-6" style={`--d:${i * 60}ms`}>
+                  <summary class="flex items-center justify-between gap-5 py-5">
+                    <span class="display text-[21px]">{f.q}</span>
+                    <span class="faq-icon flex-none text-[26px] leading-none text-accent">+</span>
+                  </summary>
+                  <p class="max-w-[660px] pb-6 text-[15.5px] leading-[1.65] text-muted">{f.a}</p>
+                </details>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- Ciudades de este sector: los radios del hub -->
+      {ciudades.length > 0 && (
+        <section class="relative px-[clamp(18px,5vw,48px)] py-[clamp(52px,7vh,92px)]">
+          <div class="mx-auto max-w-[1180px]">
+            <span class="eyebrow reveal">05 — Por ciudad</span>
+            <h2 class="display reveal mt-4 max-w-[760px] text-[clamp(28px,3.4vw,42px)]" style="--d:80ms">
+              Lo mismo, contado desde tu ciudad.
+            </h2>
+            <p class="reveal mt-4 max-w-[620px] text-[15.5px] leading-[1.65] text-muted" style="--d:120ms">
+              Cada ciudad tiene su propia manera de perder clientes. Estas paginas cuentan
+              como se ve esto donde tu trabajas.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-3">
+              {ciudades.map((c) => (
+                <a
+                  href={`/${c.slug}`}
+                  class="glass lift inline-flex items-center gap-2.5 !rounded-full px-5 py-3 text-[15px] text-dim no-underline hover:text-ink"
+                >
+                  {v.nombre} en {c.ciudad.nombre}
+                  <Icon name="arrow" size={15} />
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <!-- Otros sectores: enlazado interno -->
+      <section class="relative px-[clamp(18px,5vw,48px)] py-[clamp(52px,7vh,92px)]">
+        <div class="mx-auto max-w-[1180px]">
+          <span class="eyebrow reveal">06 — Otros sectores</span>
+          <h2 class="display reveal mt-4 text-[clamp(28px,3.4vw,42px)]" style="--d:80ms">
+            ¿No es lo tuyo? Mira el que sí.
+          </h2>
+          <div class="mt-8 flex flex-wrap gap-3">
+            {
+              verticales
+                .filter((o) => o.slug !== v.slug)
+                .map((o) => (
+                  <a
+                    href={`/${o.slug}`}
+                    class="glass lift inline-flex items-center gap-2.5 !rounded-full px-5 py-3 text-[15px] text-dim no-underline hover:text-ink"
+                  >
+                    {o.nombre}
+                    <Icon name="arrow" size={15} />
+                  </a>
+                ))
+            }
+            <a
+              href="/"
+              class="glass lift inline-flex items-center gap-2.5 !rounded-full px-5 py-3 text-[15px] text-dim no-underline hover:text-ink"
+            >
+              Ver todos los servicios
+              <Icon name="arrow" size={15} />
+            </a>
+          </div>
+        </div>
+      </section>

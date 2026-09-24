@@ -1,0 +1,22 @@
+# Dependencias y build
+node_modules/
+dist/
+deploy/
+.astro/
+
+# Documentación interna (estrategia comercial — no publicar)
+DOCS-INTERNO.md
+
+# Auditorías y capturas de trabajo
+lh-*.json
+shots/
+shots-*/
+impulsoia.io-audit/
+
+# Assets originales pesados (no se despliegan)
+reference/
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.log

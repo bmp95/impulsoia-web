@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#06d6f5"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#080b14"/>
+  <!-- Version simplificada del logo: solo la flecha y las barras.
+       La tienda se pierde a 16 px, asi que se omite. -->
+  <g fill="none" stroke="url(#g)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13 44 26 31 37 38 51 20"/>
+  </g>
+  <path d="M43 18h10v10z" fill="url(#g)"/>
+  <g fill="url(#g)">
+    <rect x="12" y="46" width="7" height="8" rx="2"/>
+    <rect x="25" y="40" width="7" height="14" rx="2"/>
+    <rect x="38" y="44" width="7" height="10" rx="2"/>
+  </g>
+</svg>

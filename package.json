@@ -1,0 +1,21 @@
+{
+  "name": "impulsoia",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "indexnow": "node tools/indexnow.mjs"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.13",
+    "astro": "^5.14.1",
+    "tailwindcss": "^4.1.13"
+  },
+  "devDependencies": {
+    "lucide-static": "^1.31.0",
+    "puppeteer-core": "^25.8.0"
+  }
+}

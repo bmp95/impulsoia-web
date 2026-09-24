@@ -1,0 +1,33 @@
+---
+import { faq } from "../data/content";
+import { ta } from "../lib/i18n";
+---
+
+<section id="faq" class="relative px-[clamp(18px,5vw,48px)] py-[clamp(52px,7vh,92px)]">
+  <div class="mx-auto max-w-[840px]">
+    <div class="mb-11 text-center">
+      <span class="eyebrow reveal" {...ta(faq.eyebrow)}>{faq.eyebrow.es}</span>
+      <h2 class="display reveal mt-4 text-[clamp(32px,4.2vw,54px)]" style="--d:80ms" {...ta(faq.title)}>
+        {faq.title.es}
+      </h2>
+    </div>
+
+    <div class="reveal flex flex-col gap-3">
+      {
+        faq.items.map((item, i) => (
+          <details class="glass spot overflow-hidden px-6" style={`--d:${i * 60}ms`}>
+            <summary class="flex items-center justify-between gap-5 py-5">
+              <span class="display text-[21px]" {...ta(item.q)}>
+                {item.q.es}
+              </span>
+              <span class="faq-icon flex-none text-[26px] leading-none text-accent">+</span>
+            </summary>
+            <p class="max-w-[660px] pb-6 text-[15.5px] leading-[1.65] text-muted" {...ta(item.a)}>
+              {item.a.es}
+            </p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

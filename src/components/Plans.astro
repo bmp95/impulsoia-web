@@ -1,0 +1,96 @@
+---
+import { plans } from "../data/content";
+import { ta } from "../lib/i18n";
+import Icon from "./Icon.astro";
+---
+
+<section id="planes" class="relative px-[clamp(18px,5vw,48px)] py-[clamp(52px,7vh,92px)]">
+  <div class="mx-auto max-w-[1180px]">
+    <div class="max-w-[680px]">
+      <span class="eyebrow reveal" {...ta(plans.eyebrow)}>{plans.eyebrow.es}</span>
+      <h2 class="display reveal mt-4 text-[clamp(34px,4.4vw,58px)]" style="--d:80ms" {...ta(plans.title)}>
+        {plans.title.es}
+      </h2>
+      <p class="reveal mt-7 text-[17px] leading-[1.65] text-muted" style="--d:140ms" {...ta(plans.body)}>
+        {plans.body.es}
+      </p>
+    </div>
+
+    <div class="mt-12 grid items-start gap-4 lg:grid-cols-3">
+      {
+        plans.items.map((p, i) => (
+          <div
+            class:list={[
+              "glass spot reveal relative flex flex-col p-8",
+              p.featured && "lg:-mt-4 lg:pb-10",
+            ]}
+            style={`--d:${i * 100}ms${
+              p.featured
+                ? ";background:linear-gradient(160deg, rgb(59 130 246/.16), rgb(6 214 245/.07) 60%, transparent);border-color:rgb(59 130 246/.45)"
+                : ""
+            }`}
+          >
+            {p.featured && <span class="glow-ring" aria-hidden="true" />}
+            {p.featured && (
+              <span
+                class="absolute -top-3 left-8 z-2 rounded-full px-3.5 py-1.5 font-mono text-[10.5px] tracking-[0.09em] text-[#050810] uppercase"
+                style="background:linear-gradient(100deg,var(--color-accent),var(--color-accent2))"
+                {...ta(plans.featuredLabel)}
+              >
+                {plans.featuredLabel.es}
+              </span>
+            )}
+
+            <h3 class="display text-[27px]" {...ta(p.name)}>
+              {p.name.es}
+            </h3>
+            <p class="mt-2 text-[14.5px] leading-[1.55] text-muted" {...ta(p.tagline)}>
+              {p.tagline.es}
+            </p>
+
+            <div class="mt-6 mb-6 border-y border-white/8 py-5">
+              <div class="display gradtext text-[clamp(34px,3.4vw,42px)] leading-none not-italic">
+                {p.setup}
+              </div>
+              <div class="mt-2 font-mono text-[12.5px] tracking-[0.05em] text-dim/80" {...ta(p.monthly)}>
+                {p.monthly.es}
+              </div>
+
+              {/* La referencia: sin ella, la cifra sola solo se lee como "caro" */}
+              <p class="mt-4 text-[13px] leading-[1.5] text-muted" {...ta(p.anchor)}>
+                {p.anchor.es}
+              </p>
+            </div>
+
+            <ul class="flex list-none flex-col gap-3 p-0 text-[14.5px]">
+              {p.features.map((f) => (
+                <li class="flex gap-3">
+                  <span class="mt-0.5 flex-none text-accent3">
+                    <Icon name="check" size={15} />
+                  </span>
+                  <span class="text-dim" {...ta(f)}>
+                    {f.es}
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <a
+              href="#contacto"
+              data-prefill={p.waMsg}
+              data-track="cta-plan"
+              data-track-detail={p.name.es}
+              class:list={["btn mt-8 w-full", p.featured ? "btn-primary" : "btn-ghost"]}
+            >
+              <span {...ta(plans.cta)}>{plans.cta.es}</span>
+            </a>
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="reveal mt-7 text-center text-[13.5px] text-muted" {...ta(plans.note)}>
+      {plans.note.es}
+    </p>
+  </div>
+</section>

@@ -1,0 +1,70 @@
+---
+import { cases } from "../data/content";
+import { ta } from "../lib/i18n";
+
+// Degradados de avatar dentro de la paleta (azul → violeta → turquesa)
+const avatars = [
+  "linear-gradient(135deg,#3b82f6,#1d4ed8)",
+  "linear-gradient(135deg,#06d6f5,#0891b2)",
+  "linear-gradient(135deg,#3b82f6,#06d6f5)",
+  "linear-gradient(135deg,#60a5fa,#2563eb)",
+  "linear-gradient(135deg,#22d3ee,#3b82f6)",
+  "linear-gradient(135deg,#0ea5e9,#075985)",
+  "linear-gradient(135deg,#06d6f5,#3b82f6)",
+  "linear-gradient(135deg,#2563eb,#06b6d4)",
+  "linear-gradient(135deg,#38bdf8,#1e40af)",
+];
+---
+
+<section id="casos" class="relative px-[clamp(18px,5vw,48px)] py-[clamp(52px,7vh,92px)]">
+  <div class="mx-auto max-w-[1180px]">
+    <div class="max-w-[680px]">
+      <span class="eyebrow reveal" {...ta(cases.eyebrow)}>{cases.eyebrow.es}</span>
+      <h2 class="display reveal mt-4 text-[clamp(34px,4.4vw,58px)]" style="--d:80ms" {...ta(cases.title)}>
+        {cases.title.es}
+      </h2>
+    </div>
+
+    <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        cases.items.map((c, i) => (
+          <figure
+            class="glass spot lift reveal flex flex-col gap-4 p-7"
+            style={`--d:${(i % 3) * 90}ms`}
+          >
+            <div>
+              <div class="display gradtext text-[clamp(38px,3.6vw,48px)] leading-none">
+                {c.metric}
+              </div>
+              <div
+                class="mt-2 font-mono text-[11.5px] tracking-[0.09em] text-muted uppercase"
+                {...ta(c.metricLabel)}
+              >
+                {c.metricLabel.es}
+              </div>
+            </div>
+
+            <blockquote class="flex-1 text-[15.5px] leading-[1.65] text-dim" {...ta(c.quote)}>
+              {c.quote.es}
+            </blockquote>
+
+            <figcaption class="flex items-center gap-3 border-t border-white/8 pt-4">
+              <span
+                class="display flex h-11 w-11 flex-none items-center justify-center rounded-full text-[17px] text-[#050810] not-italic"
+                style={`background:${avatars[i % avatars.length]}`}
+              >
+                {c.initials}
+              </span>
+              <div>
+                <div class="text-[14px] font-semibold">{c.who}</div>
+                <div class="text-[13px] text-muted" {...ta(c.role)}>
+                  {c.role.es}
+                </div>
+              </div>
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>

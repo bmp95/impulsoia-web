@@ -1,0 +1,185 @@
+---
+/**
+ * Cuerpo de una pagina SECTOR × CIUDAD (un radio del hub).
+ *
+ * Deliberadamente mas corta que la pagina de sector. La razon es de SEO, no de
+ * pereza: en una pagina local lo que cuenta es la proporcion de texto propio,
+ * no el total. Estirarla repitiendo lo que ya dice el eje la empeoraria, asi
+ * que el detalle de cada servicio vive en el eje y aqui se enlaza.
+ */
+import { hero } from "../data/content";
+import { wa } from "../lib/i18n";
+import type { Combo } from "../data/ciudades";
+import { combos } from "../data/ciudades";
+import Icon from "./Icon.astro";
+
+const { c } = Astro.props as { c: Combo };
+
+const v = c.vertical;
+const ciudad = c.ciudad;
+
+// Los otros dos anillos de enlazado: el mismo sector en otras ciudades, y otros
+// sectores en esta misma ciudad.
+const mismoSector = combos.filter((o) => o.vertical.slug === v.slug && o.slug !== c.slug);
+const mismaCiudad = combos.filter((o) => o.ciudad.slug === ciudad.slug && o.slug !== c.slug);
+---
+
+<header class="relative px-[clamp(18px,5vw,48px)] pt-[clamp(104px,13vh,150px)] pb-[clamp(32px,4vh,56px)]">
+  <div class="gridlines"></div>
+  <div class="relative z-10 mx-auto max-w-[820px]">
+    <nav class="mb-6 font-mono text-[12px] tracking-[0.08em] text-muted uppercase">
+      <a href="/" class="text-inherit no-underline hover:text-ink">Inicio</a>
+      <span class="mx-2 opacity-40">/</span>
+      <a href={`/${v.slug}`} class="text-inherit no-underline hover:text-ink">{v.nombre}</a>
+      <span class="mx-2 opacity-40">/</span>
+      <span class="text-accent2">{ciudad.nombre}</span>
+    </nav>
+
+    <h1 class="display text-[clamp(36px,5.2vw,62px)]">{c.titulo}</h1>
+
+    <p class="mt-7 text-[clamp(18px,1.6vw,21px)] leading-[1.5] text-ink">{c.angulo.titulo}.</p>
+    <p class="mt-5 text-[clamp(16px,1.4vw,18px)] leading-[1.65] text-dim">{c.angulo.texto}</p>
+
+    <div class="mt-9 flex flex-wrap gap-3.5">
+      <a
+        href="#contacto"
+        data-prefill={`Hola, tengo un negocio del sector ${v.nombre.toLowerCase()} en ${ciudad.nombre} y quiero mi Radiografía Digital`}
+        data-track="cta-radiografia"
+        data-track-detail={c.slug}
+        class="btn btn-primary max-sm:w-full"
+      >
+        <Icon name="arrow" size={18} />
+        <span>Quiero mi Radiografía Digital</span>
+      </a>
+      <a href={wa(hero.waMsg)} data-track="whatsapp-directo" class="btn btn-ghost max-sm:w-full">
+        <Icon name="whatsapp" size={18} />
+        <span>Preguntar por WhatsApp</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- El mercado local -->
+<section class="relative px-[clamp(18px,5vw,48px)] py-[clamp(48px,6vh,84px)]">
+  <div class="mx-auto max-w-[820px]">
+    <span class="eyebrow reveal">01 — El mercado en {ciudad.nombre}</span>
+    <h2 class="display reveal mt-4 text-[clamp(30px,4vw,46px)]" style="--d:80ms">
+      Por qué aquí se pierde de otra manera.
+    </h2>
+    <p class="reveal mt-6 text-[16.5px] leading-[1.7] text-muted" style="--d:120ms">{ciudad.contexto}</p>
+  </div>
+</section>
+
+<!-- Qué se instala: resumen; el detalle vive en la página de sector -->
+<section class="relative px-[clamp(18px,5vw,48px)] py-[clamp(48px,6vh,84px)]">
+  <div class="mx-auto max-w-[1180px]">
+    <span class="eyebrow reveal">02 — Qué instalamos</span>
+    <h2 class="display reveal mt-4 max-w-[760px] text-[clamp(30px,4vw,46px)]" style="--d:80ms">
+      Lo que montamos en {(v.nombre as string).toLowerCase()} de {ciudad.nombre}.
+    </h2>
+
+    <p class="reveal mt-6 max-w-[760px] text-[16.5px] leading-[1.7] text-muted" style="--d:120ms">
+      {c.angulo.prioridad}
+    </p>
+
+    <div class="mt-10 grid gap-4 lg:grid-cols-3">
+      {
+        v.solucion.map((s, i) => (
+          <article class="glass spot lift reveal flex items-baseline justify-between gap-4 p-6" style={`--d:${i * 80}ms`}>
+            <h3 class="display text-[20px]">{s.servicio}</h3>
+            <span class="flex-none font-mono text-[12px] tracking-[0.05em] text-dim/80">{s.precio}</span>
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="reveal mt-8 text-[15.5px] leading-[1.65] text-muted">
+      Qué hace exactamente cada uno, el flujo completo y las preguntas del sector están en
+      <a href={`/${v.slug}`} class="text-accent underline underline-offset-[3px] hover:text-accent2">
+        la página de {(v.nombre as string).toLowerCase()}
+      </a>. Aquí no se repite para no hacerte leer dos veces lo mismo.
+    </p>
+  </div>
+</section>
+
+<!-- Cómo trabajamos allí -->
+<section class="relative px-[clamp(18px,5vw,48px)] py-[clamp(48px,6vh,84px)]">
+  <div class="mx-auto max-w-[820px]">
+    <span class="eyebrow reveal">03 — Cómo trabajamos en {ciudad.nombre}</span>
+    <h2 class="display reveal mt-4 text-[clamp(30px,4vw,46px)]" style="--d:80ms">
+      Dónde estamos y qué significa para ti.
+    </h2>
+    <p class="reveal mt-6 text-[16.5px] leading-[1.7] text-muted" style="--d:120ms">{ciudad.logistica}</p>
+  </div>
+</section>
+
+<!-- FAQ: una propia del cruce + las de la ciudad -->
+<section class="relative px-[clamp(18px,5vw,48px)] py-[clamp(48px,6vh,84px)]">
+  <div class="mx-auto max-w-[840px]">
+    <div class="mb-11 text-center">
+      <span class="eyebrow reveal">04 — Dudas frecuentes</span>
+      <h2 class="display reveal mt-4 text-[clamp(28px,3.8vw,44px)]" style="--d:80ms">
+        Lo que preguntan en {ciudad.nombre}.
+      </h2>
+    </div>
+
+    <div class="reveal flex flex-col gap-3">
+      {
+        [c.angulo.faq, ...ciudad.faq].map((f, i) => (
+          <details class="glass spot overflow-hidden px-6" style={`--d:${i * 60}ms`}>
+            <summary class="flex items-center justify-between gap-5 py-5">
+              <span class="display text-[21px]">{f.q}</span>
+              <span class="faq-icon flex-none text-[26px] leading-none text-accent">+</span>
+            </summary>
+            <p class="max-w-[660px] pb-6 text-[15.5px] leading-[1.65] text-muted">{f.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Enlazado: mismo sector en otras ciudades, y otros sectores aquí -->
+<section class="relative px-[clamp(18px,5vw,48px)] py-[clamp(48px,6vh,84px)]">
+  <div class="mx-auto max-w-[1180px]">
+    <span class="eyebrow reveal">05 — Cerca de aquí</span>
+
+    {
+      mismoSector.length > 0 && (
+        <div class="mt-6">
+          <h3 class="display text-[22px]">{v.titulo}, en otras ciudades</h3>
+          <div class="mt-4 flex flex-wrap gap-3">
+            {mismoSector.map((o) => (
+              <a
+                href={`/${o.slug}`}
+                class="glass lift inline-flex items-center gap-2.5 !rounded-full px-5 py-3 text-[15px] text-dim no-underline hover:text-ink"
+              >
+                {o.ciudad.nombre}
+                <Icon name="arrow" size={15} />
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    {
+      mismaCiudad.length > 0 && (
+        <div class="mt-10">
+          <h3 class="display text-[22px]">Otros negocios de {ciudad.nombre}</h3>
+          <div class="mt-4 flex flex-wrap gap-3">
+            {mismaCiudad.map((o) => (
+              <a
+                href={`/${o.slug}`}
+                class="glass lift inline-flex items-center gap-2.5 !rounded-full px-5 py-3 text-[15px] text-dim no-underline hover:text-ink"
+              >
+                {o.vertical.nombre}
+                <Icon name="arrow" size={15} />
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>
